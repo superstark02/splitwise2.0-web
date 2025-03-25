@@ -14,3 +14,7 @@ export const queryClient = new QueryClient({
 export const getApiClient = (url: string) => {
     return axios.get(BASE_URL + url)
 }
+
+export const postApiClient = (url: string) => {
+    return axios.post(BASE_URL + url)
+}
