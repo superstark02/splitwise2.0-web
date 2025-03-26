@@ -6,7 +6,7 @@ export const getConnections = async () => {
     return response;
 }
 
-export const addExpense = async () => {
-    const response = await postApiClient(ADD_EXPENSE);
+export const addExpense = async (payload) => {
+    const response = await postApiClient(ADD_EXPENSE, payload);
     return response;
 }

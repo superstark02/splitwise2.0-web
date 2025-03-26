@@ -1,15 +1,26 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, FilledInput, InputAdornment, InputLabel } from "@mui/material";
+import {
+  Button,
+  FilledInput,
+  FormControlLabel,
+  InputAdornment,
+  InputLabel,
+  Radio,
+  RadioGroup,
+} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import { AppBarMain } from "../../components/app-bar/AppBarMain.tsx";
 import ChipComp from "../../components/chips/Chip.tsx";
 import { AppContex } from "../../context/Context.tsx";
 import { Friend } from "../../interface/Friends.ts";
 import { BottomSheet } from "../../components/bottom-sheet/BottomSheet.tsx";
+import { addExpense } from "../new/ApiClient.ts";
+import { UserData } from "../../interface/IntialData.ts";
 
 export const AddModifyExpense = () => {
-  const { checked, connections } = useContext(AppContex);
+  const { checked, connections, user } = useContext(AppContex);
+  const [paidBy, setPaidBy] = useState<Partial<UserData>>(user);
   // image
   // connections
 
@@ -17,9 +28,29 @@ export const AddModifyExpense = () => {
     // update all connections with amount acc to percentage/amount etc.
     // add expense
     // modify expense
+    const payload = {
+      amount: 1200,
+      paid_by: "9876543210",
+      split_type: "E",
+      expense_date: new Date(),
+      icon: "",
+      description: "",
+      connection_id: 1,
+    };
+
+    addExpense(payload).then((res) => {
+      if (res.data.success) {
+        // success
+        // redirect to "/"
+      } else {
+        // sww
+      }
+    });
   };
 
   const handleDelete = () => {};
+
+  const handleChange = () => {};
 
   const selectedConnections = useMemo(() => {
     const result = new Array<Friend>();
@@ -133,17 +164,35 @@ export const AddModifyExpense = () => {
               alignItems: "center",
             }}
           >
-            Paid by <ChipComp title={"You"} onClick={() => {}} /> and Split{" "}
-            <ChipComp title={"Equally"} onClick={() => {}} />
+            Paid by <ChipComp title={paidBy.name ?? "You"} onClick={() => {}} />{" "}
+            and Split <ChipComp title={"Equally"} onClick={() => {}} />
           </div>
         </div>
 
-        <Button style={{ marginTop: "12px" }} fullWidth variant="contained">
+        <Button
+          onClick={addModifyExpense}
+          style={{ marginTop: "12px" }}
+          fullWidth
+          variant="contained"
+        >
           Add Expense
         </Button>
 
         <BottomSheet open={false} setOpen={() => {}}>
           <div>Select user</div>
+          <RadioGroup
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="controlled-radio-buttons-group"
+            value={paidBy}
+            onChange={handleChange}
+          >
+            <FormControlLabel
+              value="female"
+              control={<Radio />}
+              label="Female"
+            />
+            <FormControlLabel value="male" control={<Radio />} label="Male" />
+          </RadioGroup>
         </BottomSheet>
       </div>
     </div>
